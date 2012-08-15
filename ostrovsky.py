@@ -59,7 +59,7 @@ class Prenetwork:
 		# For each agent in the system
 
 		for agent in self.system.agents:
-			#print "Checking Agent ", agent.id
+			print "Checking Agent ", agent.id
 			contracts = [] # [Contract]
 
 			# Get all contracts that correspond to 
@@ -68,7 +68,7 @@ class Prenetwork:
 				if self.system.arrows[arrow].targetId == agent.id:
 					contracts.append(self.system.arrows[arrow].contractId)
 
-			#print "Contracts pointing at Agent ", agent.id, " are ", contracts
+			print "Contracts pointing at Agent ", agent.id, " are ", contracts
 
 			# Create corresponding contract list to pass to choice function
 			contractList = []
@@ -77,6 +77,7 @@ class Prenetwork:
 
 			# For each contract, try adding it
 			for contract in self.system.contracts:
+				print "Testing Contract: ", contract.id
 				added_one = False
 
 				if contract.id not in contracts:
@@ -86,12 +87,12 @@ class Prenetwork:
 
 				# Find the choice set of contracts
 				choiceContracts = agent.choice(contractList)
-				"""
+				
 				print 'choice contract set from ', contracts, ' = ',
 				for c in choiceContracts:
 					print c.id,
 				print ""
-				"""
+				
 				# Get list of choice contract id's
 				choiceContractIds = []
 				for c in choiceContracts:
@@ -133,9 +134,13 @@ class Prenetwork:
 
 	def T_algorithm(self):
 
+		print "Running T-Algorithm"
+
 		newArrows = self.T_iterate()
 		newArrows.sort()
 		self.arrowIds.sort()
+
+		"""
 
 		# Iterate to a fixed point
 		
@@ -148,6 +153,8 @@ class Prenetwork:
 
 		print "Fixed Point Reached"
 		
+		"""
+
 		# Apply F-map algorithm
 
 		contracts = self.F_map()
@@ -188,12 +195,12 @@ class Agent:
 
 	# Generates choice set of contracts
 	def choice(self, contracts):
-		"""
+		
 		print "choosing from: ",
 		for c in contracts:
 			print c.id,
 		print ""
-		"""
+		
 
 		# Generate power set of possible contracts
 
@@ -203,6 +210,7 @@ class Agent:
 
 		for contractSet in allContractSets:
 			u = self.utility(self,contractSet)
+
 			if u > maxU:
 				maxU = u
 				maxContractSet = contractSet
